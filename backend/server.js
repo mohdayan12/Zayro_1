@@ -8,7 +8,7 @@ import listRoute from './routes/listing.routes.js';
 import bookRoute from './routes/book.routes.js';
 
 const app=express();
-const port=4000;
+const port=process.env.PORT || 5000
 
 
 
@@ -16,7 +16,7 @@ const port=4000;
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-     origin:"http://localhost:5173",  
+     origin:"https://zayro-1.vercel.app",  
      credentials: true 
 }))
 
