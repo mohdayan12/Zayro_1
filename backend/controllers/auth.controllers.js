@@ -1,6 +1,7 @@
 import User from '../models/user.models.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
+import { sendNewUserEmail } from '../utils/sendNewUserEmail.js';
 
 
 /* -------------------------- generate token function ----------------------------- */
@@ -58,6 +59,7 @@ const userSignup=async(req,res)=>{
         const newUser=await User.create({name,email,password:hashPassword});
 
         const  token= generateToken(newUser._id);
+        await sendNewUserEmail(newUser.email,newUser.name);
         return res.json({success:true,token})    
     } catch (error) {
         console.log(error);
