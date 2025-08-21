@@ -69,4 +69,32 @@ const userSignup=async(req,res)=>{
 }
 
 
-export {userLogin,userSignup};
+/* -------------------------- googlelogin controller  ----------------------------- */ 
+const googleLogin=async(req,res)=>{
+   try {
+     const {name,email}=req.body;
+     let user
+      user=await User.findOne({email});
+     if(!user){
+       const password=Math.floor((10000000+Math.random()*90000000)).toString();
+       const hashPassword= await bcrypt.hash(password,10)
+       
+       const newUser=new User({
+       name,
+       email,
+       password:hashPassword
+       })
+        await newUser.save();
+        user=newUser
+        await sendNewUserEmail(email,name)
+     }  
+     const token=generateToken(user._id)
+     res.json({success:true,token})
+   } catch (error) {
+      console.log(error);
+      res.json({success:false,message:error.message});
+   }
+ 
+ }
+
+export {userLogin,userSignup,googleLogin};

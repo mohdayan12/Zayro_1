@@ -5,6 +5,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { authDataContext } from '../context/AuthContext';
 import { assets } from '../assets/assets';
+import { FcGoogle } from "react-icons/fc"
+import { auth , provider} from '../utils/Firebase.js';
+import { signInWithPopup } from 'firebase/auth';
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -12,7 +15,7 @@ const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { backendUrl, token, setToken, navigate, getCurrentUser } = useContext(authDataContext);
+  const { backendUrl,  setToken, navigate, getCurrentUser } = useContext(authDataContext);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -22,7 +25,7 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token)
           localStorage.setItem('token',response.data.token)
-          toast.success('user in logged in');
+          toast.success('user is logged in');
           await getCurrentUser(response.data.token);
           navigate('/');
         } else {
@@ -44,6 +47,29 @@ const Login = () => {
       toast.error(error.message);
     }
   };
+
+  const googleLogin=async()=>{
+    const result= await signInWithPopup(auth,provider);
+    const user=result.user
+    const name=user.displayName
+    const email=user.email
+    try {
+       const response= await axios.post(backendUrl + '/api/auth/googleLogin',{name,email},{withCredentials:true})
+       if(response.data.success){
+        setToken(response.data.token)
+        localStorage.setItem('token',response.data.token)
+        navigate('/');
+        toast.success('user is logged in');
+        await getCurrentUser(response.data.token); 
+       }
+       else {
+          toast.error(response.data.message);
+        }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-sky-100 w-full relative ">
@@ -130,6 +156,15 @@ const Login = () => {
             {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
           </button>
         </form>
+         <div className="flex items-center my-6">
+          <hr className="flex-grow border-gray-300" />
+          <span className="mx-2 text-gray-500">OR</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+        <button onClick={googleLogin} className='flex items-center justify-center gap-4 border border-gray-300 py-3 px-2 rounded-xl w-full'>
+        <FcGoogle className='text-3xl'/>
+        <h1 className='text-[18px]'>Continue with Google</h1> 
+        </button>
       </div>
     </div>
   );

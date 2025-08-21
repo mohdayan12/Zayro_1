@@ -16,7 +16,7 @@ const port=process.env.PORT || 5000
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-     origin:"https://zayro-1.vercel.app",  
+     origin:["https://zayro-1.vercel.app","http://localhost:5173"],  
      credentials: true 
 }))
 
