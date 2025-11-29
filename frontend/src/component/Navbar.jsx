@@ -89,16 +89,16 @@ const Navbar = () => {
 
             {userData ? (
               <div className="flex flex-col gap-3 text-gray-800">
-                <span onClick={()=>navigate('/add-list')}>List Your Home</span>
-                <span onClick={()=>navigate('/my-listing')}>My Listings</span>
-                <span onClick={()=>navigate('/my-booking')}>My Bookings</span>
+                <span className='cursor-pointer' onClick={()=>navigate('/add-list')}>List Your Home</span>
+                <span className='cursor-pointer' onClick={()=>navigate('/my-listing')}>My Listings</span>
+                <span className='cursor-pointer' onClick={()=>navigate('/my-booking')}>My Bookings</span>
                 <button onClick={()=>logout()} className="text-red-500 text-left">
                   Logout
                 </button>
               </div>
             ) : (
               <div className="flex flex-col gap-2 text-gray-700">
-                <span onClick={()=>navigate('/login')}>login</span>
+                <span className='cursor-pointer' onClick={()=>navigate('/login')}>login</span>
               </div>
             )}
           </div>
