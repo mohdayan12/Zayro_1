@@ -6,7 +6,7 @@ import { FcCancel } from "react-icons/fc";
 import { toast } from 'react-toastify';
 
 const Card = ({ id, title, image1, image2, image3, image4, price, landmark, city, rating, isBooked, host }) => {
-  const { userData, handleViewCard, navigate, cancelBooking} = useContext(authDataContext);
+  const { userData, handleViewCard, navigate, cancelBooking } = useContext(authDataContext);
   const [popUp, setPopUp] = useState(false);
 
   const handleClick = () => {
@@ -16,18 +16,18 @@ const Card = ({ id, title, image1, image2, image3, image4, price, landmark, city
       navigate('/login');
     }
   };
-  const clickCard=()=>{
-    if(!isBooked){
+  const clickCard = () => {
+    if (!isBooked) {
       handleClick()
     }
-    else{
+    else {
       toast.info("you can't click the booked listing")
     }
   }
 
   return (
     <div
-      onClick={() =>clickCard()}
+      onClick={() => clickCard()}
       className="bg-white w-[330px] max-w-[90%] h-[440px] shadow-lg rounded-2xl overflow-hidden cursor-pointer relative hover:shadow-2xl transition duration-300"
     >
       {/* Booked Label */}
@@ -91,7 +91,7 @@ const Card = ({ id, title, image1, image2, image3, image4, price, landmark, city
             <FaStar /> {rating}
           </span>
         </div>
-          <span className="truncate "> {city.toUpperCase()}</span>
+        <span className="truncate "> {city.toUpperCase()}</span>
         <p className="text-gray-700 text-sm truncate">{title.toUpperCase()}</p>
         <span className="text-sky-800 font-bold text-lg">
           ₹ {price} <span className="text-sm font-normal">/day</span>

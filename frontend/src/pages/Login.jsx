@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { authDataContext } from '../context/AuthContext';
 import { assets } from '../assets/assets';
 import { FcGoogle } from "react-icons/fc"
-import { auth , provider} from '../utils/Firebase.js';
+import { auth, provider } from '../utils/Firebase.js';
 import { signInWithPopup } from 'firebase/auth';
 
 const Login = () => {
@@ -15,16 +15,16 @@ const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { backendUrl,  setToken, navigate, getCurrentUser } = useContext(authDataContext);
+  const { backendUrl, setToken, navigate, getCurrentUser } = useContext(authDataContext);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
       if (currentState === 'Login') {
-        const response = await axios.post(backendUrl + '/api/auth/login',{ email, password },{ withCredentials: true });
+        const response = await axios.post(backendUrl + '/api/auth/login', { email, password }, { withCredentials: true });
         if (response.data.success) {
           setToken(response.data.token)
-          localStorage.setItem('token',response.data.token)
+          localStorage.setItem('token', response.data.token)
           toast.success('user is logged in');
           await getCurrentUser(response.data.token);
           navigate('/');
@@ -32,10 +32,10 @@ const Login = () => {
           toast.error(response.data.message);
         }
       } else {
-        const response = await axios.post(backendUrl + '/api/auth/signup',{ name, email, password },{ withCredentials: true });
+        const response = await axios.post(backendUrl + '/api/auth/signup', { name, email, password }, { withCredentials: true });
         if (response.data.success) {
           setToken(response.data.token)
-          localStorage.setItem('item',response.data.token)
+          localStorage.setItem('item', response.data.token)
           toast.success(response.data.message);
           navigate('/');
         } else {
@@ -48,23 +48,23 @@ const Login = () => {
     }
   };
 
-  const googleLogin=async()=>{
-    const result= await signInWithPopup(auth,provider);
-    const user=result.user
-    const name=user.displayName
-    const email=user.email
+  const googleLogin = async () => {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user
+    const name = user.displayName
+    const email = user.email
     try {
-       const response= await axios.post(backendUrl + '/api/auth/googleLogin',{name,email},{withCredentials:true})
-       if(response.data.success){
+      const response = await axios.post(backendUrl + '/api/auth/googleLogin', { name, email }, { withCredentials: true })
+      if (response.data.success) {
         setToken(response.data.token)
-        localStorage.setItem('token',response.data.token)
+        localStorage.setItem('token', response.data.token)
         navigate('/');
         toast.success('user is logged in');
-        await getCurrentUser(response.data.token); 
-       }
-       else {
-          toast.error(response.data.message);
-        }
+        await getCurrentUser(response.data.token);
+      }
+      else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
       console.log(error)
       toast.error(error.message)
@@ -73,13 +73,13 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-sky-100 w-full relative ">
-       <div onClick={()=>navigate('/')}
-         className="absolute top-6 left-6 flex items-center gap-2 bg-white text-sky-700 px-4 py-2 rounded-full shadow hover:bg-sky-50 transition">
-           <img src={assets.dropdown} className="w-4 rotate-180" alt="Back" />
-    
+      <div onClick={() => navigate('/')}
+        className="absolute top-6 left-6 flex items-center gap-2 bg-white text-sky-700 px-4 py-2 rounded-full shadow hover:bg-sky-50 transition">
+        <img src={assets.dropdown} className="w-4 rotate-180" alt="Back" />
+
       </div>
       <div className="bg-white shadow-xl rounded-2xl p-10 w-[90%] max-w-lg">
-       
+
         <h2 className="text-3xl font-bold text-center text-sky-700 mb-2">
           {currentState === 'Login' ? 'Welcome Back!' : 'Join Zayro'}
         </h2>
@@ -100,7 +100,7 @@ const Login = () => {
                 required
                 className="peer p-3 w-full border border-gray-300 rounded-lg focus:outline-sky-500"
               />
-             
+
             </div>
           )}
 
@@ -113,7 +113,7 @@ const Login = () => {
               required
               className="peer p-3 w-full border border-gray-300 rounded-lg focus:outline-sky-500"
             />
-          
+
           </div>
 
           <div className="relative">
@@ -125,7 +125,7 @@ const Login = () => {
               required
               className="peer p-3 w-full border border-gray-300 rounded-lg focus:outline-sky-500"
             />
-           
+
             <div className="absolute right-4 top-4 text-xl cursor-pointer text-gray-500">
               {show ? (
                 <IoEyeOffOutline onClick={() => setShow(false)} />
@@ -156,14 +156,14 @@ const Login = () => {
             {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
           </button>
         </form>
-         <div className="flex items-center my-6">
+        <div className="flex items-center my-6">
           <hr className="flex-grow border-gray-300" />
           <span className="mx-2 text-gray-500">OR</span>
           <hr className="flex-grow border-gray-300" />
         </div>
         <button onClick={googleLogin} className='flex items-center justify-center gap-4 border border-gray-300 py-3 px-2 rounded-xl w-full'>
-        <FcGoogle className='text-3xl'/>
-        <h1 className='text-[18px]'>Continue with Google</h1> 
+          <FcGoogle className='text-3xl' />
+          <h1 className='text-[18px]'>Continue with Google</h1>
         </button>
       </div>
     </div>
